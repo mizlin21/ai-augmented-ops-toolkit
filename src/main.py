@@ -5,6 +5,7 @@ from pathlib import Path
 
 from src.checks.log_check import run_log_check
 from src.checks.service_check import run_service_check
+from src.checks.config_check import run_config_check
 from src.utils.io import write_json
 
 
@@ -42,6 +43,20 @@ def main() -> None:
         f"degraded={service_result['summary']['status_counts'].get('degraded', 0)}"
     )
 
+ # -----------------------
+    # 3) Config Validation Check
+    # -----------------------
+    config_path = repo_root / "data" / "simulated_config" / "app_config.json"
+    config_result = run_config_check(config_path)
+    write_json(out_dir / "results_config_check.json", config_result)
+
+    print(f"[OK] Wrote: {out_dir / 'results_config_check.json'}")
+    print(
+        f"[STATUS] {config_result['status']} | "
+        f"missing={len(config_result['summary']['missing_keys'])} "
+        f"invalid={len(config_result['summary']['invalid_values'])} "
+        f"warnings={len(config_result['summary']['warnings'])}"
+    )
 
 if __name__ == "__main__":
     main()

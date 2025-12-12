@@ -1,0 +1,48 @@
+{
+  "check": "service_check",
+  "evidence_preview": [
+    {
+      "name": "nginx",
+      "status": "running"
+    },
+    {
+      "name": "sshd",
+      "status": "running"
+    },
+    {
+      "name": "nightly-backup",
+      "status": "degraded"
+    },
+    {
+      "name": "metrics-agent",
+      "status": "stopped"
+    }
+  ],
+  "findings": [
+    "One or more services are stopped."
+  ],
+  "status": "FAIL",
+  "summary": {
+    "degraded": [
+      {
+        "name": "nightly-backup",
+        "status": "degraded"
+      }
+    ],
+    "status_counts": {
+      "degraded": 1,
+      "running": 2,
+      "stopped": 1,
+      "unknown": 0
+    },
+    "stopped": [
+      {
+        "name": "metrics-agent",
+        "status": "stopped"
+      }
+    ],
+    "total_services": 4,
+    "unknown": []
+  },
+  "target": "C:\\Users\\Linda G Saune\\OneDrive\\Desktop\\ai-augmented-ops-toolkit\\data\\simulated_config\\services.json"
+}
