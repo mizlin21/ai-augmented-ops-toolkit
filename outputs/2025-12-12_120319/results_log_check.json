@@ -1,0 +1,87 @@
+{
+  "check": "log_check",
+  "evidence_preview": [
+    {
+      "level": "INFO",
+      "message": "Accepted password for linda from 10.0.0.5 port 51234",
+      "parse_ok": true,
+      "severity": 1,
+      "source": "sshd",
+      "ts": "2025-12-10T12:01:10Z"
+    },
+    {
+      "level": "WARN",
+      "message": "Failed password for invalid user admin from 203.0.113.9 port 60001",
+      "parse_ok": true,
+      "severity": 5,
+      "source": "sshd",
+      "ts": "2025-12-10T12:01:12Z"
+    },
+    {
+      "level": "WARN",
+      "message": "Failed password for invalid user admin from 203.0.113.9 port 60002",
+      "parse_ok": true,
+      "severity": 5,
+      "source": "sshd",
+      "ts": "2025-12-10T12:01:14Z"
+    },
+    {
+      "level": "ERROR",
+      "message": "Too many authentication failures for root from 203.0.113.9",
+      "parse_ok": true,
+      "severity": 10,
+      "source": "sshd",
+      "ts": "2025-12-10T12:01:20Z"
+    },
+    {
+      "level": "INFO",
+      "message": "Started nightly-backup.service",
+      "parse_ok": true,
+      "severity": 1,
+      "source": "systemd",
+      "ts": "2025-12-10T12:02:01Z"
+    },
+    {
+      "level": "WARN",
+      "message": "nightly-backup.service took longer than expected",
+      "parse_ok": true,
+      "severity": 5,
+      "source": "systemd",
+      "ts": "2025-12-10T12:02:40Z"
+    }
+  ],
+  "findings": [
+    "Errors detected in logs.",
+    "Multiple warnings detected; investigate potential degradation."
+  ],
+  "status": "FAIL",
+  "summary": {
+    "level_counts": {
+      "ERROR": 1,
+      "INFO": 2,
+      "WARN": 3
+    },
+    "parsed_events": 6,
+    "top_issues": [
+      {
+        "count": 1,
+        "issue": "sshd | Failed password for invalid user admin from 203.0.113.9 port 60001"
+      },
+      {
+        "count": 1,
+        "issue": "sshd | Failed password for invalid user admin from 203.0.113.9 port 60002"
+      },
+      {
+        "count": 1,
+        "issue": "sshd | Too many authentication failures for root from 203.0.113.9"
+      },
+      {
+        "count": 1,
+        "issue": "systemd | nightly-backup.service took longer than expected"
+      }
+    ],
+    "total_lines": 6,
+    "total_severity": 27
+  },
+  "target": "C:\\Users\\Linda G Saune\\OneDrive\\Desktop\\ai-augmented-ops-toolkit\\data\\logs\\sample_auth.log"
+}
