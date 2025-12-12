@@ -7,6 +7,8 @@ from src.checks.log_check import run_log_check
 from src.checks.service_check import run_service_check
 from src.checks.config_check import run_config_check
 from src.utils.io import write_json
+from src.llm.summarizer import summarize_results
+
 
 
 def main() -> None:
@@ -43,7 +45,7 @@ def main() -> None:
         f"degraded={service_result['summary']['status_counts'].get('degraded', 0)}"
     )
 
- # -----------------------
+    # -----------------------
     # 3) Config Validation Check
     # -----------------------
     config_path = repo_root / "data" / "simulated_config" / "app_config.json"
@@ -57,6 +59,22 @@ def main() -> None:
         f"invalid={len(config_result['summary']['invalid_values'])} "
         f"warnings={len(config_result['summary']['warnings'])}"
     )
+
+    # -----------------------
+    # 4) AI Summary (Safe)
+    # -----------------------
+    all_results = {
+    "log_check": log_result,
+    "service_check": service_result,
+    "config_check": config_result,
+}
+
+    ai_summary = summarize_results(all_results)
+    write_json(out_dir / "results_ai_summary.json", ai_summary)
+
+    print(f"[OK] Wrote: {out_dir / 'results_ai_summary.json'}")
+    print("[INFO] AI summary generated (no inference, summarization only).")
+
 
 if __name__ == "__main__":
     main()
