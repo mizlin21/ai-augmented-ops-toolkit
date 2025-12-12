@@ -1,78 +1,243 @@
 # AI-Augmented System Operations Toolkit
 
-A lightweight, enterprise-style operations toolkit that runs common system checks (logs, service health, config validation), outputs structured results (JSON), and generates an AI-assisted summary for faster human triage.
+A lightweight, enterprise-style system operations toolkit that runs deterministic checks (log analysis, service health, configuration validation), produces structured evidence (JSON), and generates a **safe AI-assisted summary** for faster human triage.
 
-## Why this exists
-In real operations, engineers don’t have time to manually parse logs, cross-check service states, and validate configs during incidents. This toolkit simulates that workflow and shows how automation + safe AI summarization can reduce time-to-understand without hiding raw evidence.
+This project demonstrates how **automation and responsible AI** can improve operational visibility **without replacing deterministic controls or hiding raw evidence**.
 
-## What it does (MVP)
-- Log Check: parses log files and extracts warnings/errors + top issues
-- Service Health Check: evaluates simulated service status data
-- Config Validation: validates required configuration keys and safe values
-- Outputs machine-readable results (JSON) + a human-friendly AI summary
+---
 
-# AI-Augmented System Operations Toolkit
+## Why This Exists
 
-A lightweight, enterprise-style operations toolkit that runs common system checks (logs, service health, config validation), outputs structured results (JSON), and generates an AI-assisted summary for faster human triage.
+In real enterprise environments, operators often need to:
+- parse logs under time pressure
+- cross-check service states
+- validate configuration safety
+- communicate system health quickly and accurately
 
-## Why this exists
-In real operations, engineers don’t have time to manually parse logs, cross-check service states, and validate configs during incidents. This toolkit simulates that workflow and shows how automation + safe AI summarization can reduce time-to-understand without hiding raw evidence.
+Manual inspection is:
+- slow
+- error-prone
+- difficult to scale
 
-## Features (MVP)
-- ✅ Log Check (parse auth/app logs; detect warnings/errors; extract top issues)
-- ✅ Service Health Check (simulated service states via JSON)
-- ✅ Config Validation (required keys + safe values)
-- ✅ Structured outputs: JSON result bundle per run
-- ✅ AI Summary layer: converts results → human-readable triage notes (with guardrails)
+This toolkit simulates a real operations workflow by:
+- automating common checks
+- preserving auditable evidence
+- using AI **only** to summarize validated results
+
+---
+
+## What This Toolkit Does (MVP)
+
+- ✅ **Log Analysis**
+  - Parses log files
+  - Extracts INFO / WARN / ERROR counts
+  - Identifies top recurring issues
+  - Preserves raw evidence
+
+- ✅ **Service Health Check**
+  - Evaluates simulated service states
+  - Detects running, degraded, and stopped services
+  - Produces clear PASS / WARN / FAIL status
+
+- ✅ **Configuration Validation**
+  - Validates required configuration keys
+  - Enforces safe value ranges
+  - Flags risky but non-fatal settings
+
+- ✅ **Structured Outputs**
+  - One JSON artifact per check
+  - Timestamped output folders per run
+
+- ✅ **AI Summary Layer (Safe by Design)**
+  - Converts validated results into human-readable summaries
+  - Uses strict guardrails (no inference, no mutation)
+
+---
+
+## How to Run
+
+### Option 1 — Run Like an Operator (Recommended)
+```powershell
+.\scripts\run_all.ps1
+
+``` 
+
+### Option 2 — Run Directly with Python
+```
+ python -m src.main
+
+``` 
+
+---
+
+## Output Artifacts
+
+Each execution creates a timestamped folder:
+
+outputs/<YYYY-MM-DD_HHMMSS>/
+
+
+Containing:
+
+results_log_check.json
+
+results_service_check.json
+
+results_config_check.json
+
+results_ai_summary.json
+
+Each file is independent, auditable, and machine-readable.
+
+⚠️ Runtime outputs are environment-specific and are recommended to be ignored in git.
+
+---
+
+## Architecture Overview
+
+This toolkit follows a deterministic-first, AI-assisted architecture.
+
+### High-Level Flow
+```text
+Operator / Automation
+        |
+        v
+scripts/run_all.ps1
+        |
+        v
+python -m src.main
+        |
+        v
++----------------------------+
+|   Orchestration (main.py)  |
++----------------------------+
+   |         |          |
+   v         v          v
+Log Check  Service     Config
+           Check       Check
+   |         |          |
+   +---------+----------+
+             |
+             v
+     Structured JSON Evidence
+             |
+             v
+        AI Summary Layer
+        (Read-only, Safe)
+             |
+             v
+  results_ai_summary.json
+```
+See detailed documentation in: docs/ARCHITECTURE.md
+
+---
+
+## AI Safety & Guardrails (Responsible AI)
+
+The AI layer is advisory only.
+
+**What the AI does**
+- Reads structured JSON results
+- Summarizes system health
+- Improves human readability
+
+
+#### What the AI does NOT do
+
+- ❌ Execute commands
+- ❌ Modify files or system state
+- ❌ Override PASS / WARN / FAIL decisions
+- ❌ Invent metrics or events
+- ❌ Hide raw evidence
+
+Source of truth remains deterministic checks.
+
+This design aligns with enterprise AI governance, auditability, and compliance expectations.
+
+---
 
 ## Project Structure
+```
 src/
-main.py
-checks/
-log_check.py
-service_check.py
-config_check.py
-llm/
-summarizer.py
-utils/
-io.py
+  main.py
+  checks/
+    log_check.py
+    service_check.py
+    config_check.py
+  llm/
+    summarizer.py
+  utils/
+    io.py
+
 data/
-logs/
-sample_auth.log
-simulated_config/
-services.json
-app_config.json
-outputs/
+  logs/
+    sample_auth.log
+  simulated_config/
+    services.json
+    app_config.json
+
 scripts/
-run_all.sh
+  run_all.ps1
+
 docs/
-ARCHITECTURE.md
+  ARCHITECTURE.md
+
 tests/
 
+outputs/        # runtime artifacts (recommended .gitignore)
+```
 
-## How to Run (coming Day 3)
-- Run all checks
-- Save outputs to ./outputs/<timestamp>/
-- Generate AI summary
+---
 
-## Safety / Guardrails (coming Day 4)
-- Never invents metrics not present in JSON results
-- Marks unknowns clearly
-- Keeps raw evidence visible for human verification
+## Why This Matters for IBM / Enterprise Roles
 
-## Why this matters for IBM
-This project demonstrates:
-- Systems thinking (design-first approach, repeatable checks, structured outputs)
-- Automation mindset (Python + operational glue)
-- Responsible AI integration (summarization with constraints)
-- Clear documentation and “operator-friendly” tooling
+#### This project demonstrates:
 
-## Roadmap
-- Day 2: Implement core Python checks
-- Day 3: Add orchestration scripts + CLI usage
-- Day 4: Add AI summarizer + safety constraints
-- Day 5: Polish + architecture diagram + IBM framing
+- Systems thinking
+- Design before implementation
+- Clear separation of concerns
+- Automation mindset
+- Repeatable, operator-friendly execution
+- Timestamped, auditable outputs
+- Responsible AI integration
+- AI as a communication layer, not a controller
+- Guardrails that prevent hallucination and unsafe behavior
+- Enterprise readiness
+- Deterministic behavior
+- Clear documentation
+- Interview-ready architecture narrative
 
-## Example Output (coming soon)
-- outputs/2025-xx-xx_1200/results.json
-- outputs/2025-xx-xx_1200/ai_summary.md
+---
+
+## Example Execution
+
+Produces:
+
+outputs/2025-12-12_151709/
+  results_log_check.json
+  results_service_check.json
+  results_config_check.json
+  results_ai_summary.json
+
+---
+
+## Roadmap (Optional Enhancements)
+
+- Add Linux/macOS runner script
+- Add exit codes based on overall health
+- Add basic unit tests per check
+- Add CI integration (GitHub Actions)
+- Add SOC-style incident summary mode
+
+---
+
+## Final Note
+
+This is **not** a demo or toy project.
+
+It is a  **mini operations platform** designed to reflect:
+- real enterprise workflows
+- safe AI adoption
+- professional engineering practices
+
+---
