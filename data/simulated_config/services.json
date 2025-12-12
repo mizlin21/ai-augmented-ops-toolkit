@@ -1,0 +1,8 @@
+{
+  "services": [
+    {"name": "nginx", "status": "running"},
+    {"name": "sshd", "status": "running"},
+    {"name": "nightly-backup", "status": "degraded"},
+    {"name": "metrics-agent", "status": "stopped"}
+  ]
+}
